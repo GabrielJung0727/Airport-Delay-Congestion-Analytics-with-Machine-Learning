@@ -359,3 +359,114 @@ python -m ml.train \
 - [ ] 예측 API 동작
 - [ ] 프론트 통계/예측 표시
 - [ ] 보고서/PPT 정리
+
+---
+
+## 15. 실행 로드맵 (0% → 100%+)
+**목표:** 설명 생략, 순서대로 실행. 각 Phase 완료 기준 포함.
+
+### 🟥 PHASE 0 — 프로젝트 잠금 해제 (0% → 5%)
+1. Git 초기화 및 첫 커밋
+2. `.env` 실제 값 채우기 (API Key, Path)
+3. Python venv 활성화
+4. Backend / Frontend `hello world` 실행
+5. `tree`로 폴더 구조 스냅샷 저장  
+✅ 프론트 localhost 접속, 백엔드 `/health` 200
+
+### 🟧 PHASE 1 — Raw 데이터 고정 (5% → 15%)
+6. `data/raw/` 파일명 규칙 통일
+7. 각 파일 SHA/행 수 기록
+8. `docs/01_data_dictionary.md` (파일명/기간/컬럼/Join Key 후보)
+9. “raw 수정 금지” 규칙 명시  
+✅ raw 폴더 봉인, 구조 설명 가능
+
+### 🟨 PHASE 2 — 항공편 Master Table (15% → 25%)
+10. `ml/pipelines/00_merge_raw.py`
+11. 출도착 데이터 2개 병합
+12. 컬럼 영문화/표준화
+13. 날짜/시간 타입 정규화
+14. 중복 항공편 제거
+15. 결측/비정상 행 로그
+16. `data/interim/flights_master.parquet`  
+✅ “1행=1플라이트” 성립
+
+### 🟨 PHASE 3 — 지연 라벨 정의 (25% → 30%)
+17. 예정/실제 도착 시간 차이 계산
+18. `delay_minutes` 생성
+19. `delay_label` 생성 (15분 기준)
+20. 결항/회항 처리 정책 결정
+21. 지연률 분포 확인  
+✅ “무엇을 예측?” 한 문장 답 가능
+
+### 🟩 PHASE 4 — 혼잡도 Feature (30% → 45%)
+22. 공항별 통계 파싱
+23. 시간대별 통계 파싱
+24. 요일별 통계 파싱
+25. 시계열 통계 파싱
+26. 공항 코드/명 통일
+27. 시간대 bin 통일
+28. 혼잡도 수식 정의 (시간대 운항량, 일평균 대비 비율, 이전 시간대 지연률)
+29. `features_congestion` 테이블 생성  
+✅ “혼잡도”를 수식으로 설명 가능
+
+### 🟩 PHASE 5 — Feature 병합 (45% → 55%)
+30. 항공편 × 혼잡도 병합
+31. 시간/요일/월 feature 추가
+32. Lag feature 추가
+33. 결측 처리 전략 적용
+34. `data/processed/train_table.parquet`  
+✅ 단일 테이블로 학습 가능
+
+### 🟦 PHASE 6 — EDA & 인사이트 (55% → 65%)
+35. 전체 지연률
+36. 공항별 지연률 TOP/BOTTOM
+37. 시간대별 지연 Heatmap
+38. 혼잡도 vs 지연 산점도
+39. 월별/요일별 패턴
+40. 핵심 인사이트 3~5개 문장화  
+✅ 모델 없어도 발표 가능
+
+### 🟦 PHASE 7 — API 데이터 연동 (65% → 70%)
+41. 4개 API 수집 스크립트
+42. Raw JSON 저장
+43. 정규화 테이블 생성
+44. 기상/혼잡 보조 feature 검토
+45. “실시간 확장 가능” 근거 확보  
+✅ API = 학습 보조 + 데모용
+
+### 🟪 PHASE 8 — 모델 학습 (70% → 85%)
+46. Baseline: Logistic/RF
+47. XGBoost 학습
+48. CatBoost 학습
+49. LightGBM 학습
+50. 불균형 처리
+51. Threshold 튜닝
+52. 성능 비교표
+53. Feature Importance 추출  
+✅ “왜 이 모델이 낫다” 설명 가능
+
+### 🟪 PHASE 9 — Backend API (85% → 92%)
+54. 통계 조회 API
+55. 예측 API
+56. 모델 로딩/추론 분리
+57. 에러 핸들링
+58. Swagger 검증  
+✅ curl로 예측값 수신
+
+### 🟦 PHASE 10 — Frontend (92% → 98%)
+59. Dashboard
+60. Airport Detail
+61. Prediction Lab
+62. 차트 연결
+63. 로딩/에러 처리  
+✅ 시연 가능
+
+### 🟩 PHASE 11 — 정리 & 제출 (98% → 100%)
+64. 보고서 작성
+65. PPT 제작
+66. 예상 질문 답변 준비
+67. 리허설 1회  
+🎉 완료
+
+### 🟨 PHASE ∞ — 확장 (보너스)
+- 실시간 예측, DB 적재, AutoML 비교, 추가 공항/항공사
