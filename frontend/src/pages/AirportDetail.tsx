@@ -4,19 +4,21 @@ import ErrorState from "../components/ErrorState";
 import PageLayout from "../components/PageLayout";
 import { fetchHourlyStats, fetchTimeseriesStats } from "../api/stats";
 import { HourlyStat, TimeseriesPoint } from "../types/stats";
+import { useTranslation } from "../i18n";
 
 const gateSnapshot = [
-  { terminal: "T1 Gates A-F", utilization: 0.82, status: "High load" },
-  { terminal: "T1 Gates G-M", utilization: 0.68, status: "Stable" },
-  { terminal: "T2 Gates N-R", utilization: 0.74, status: "Elevated" },
-  { terminal: "Satellite Gates", utilization: 0.41, status: "Available" }
-];
+  { terminal: "T1 Gates A-F", utilization: 0.82, status: "high" },
+  { terminal: "T1 Gates G-M", utilization: 0.68, status: "stable" },
+  { terminal: "T2 Gates N-R", utilization: 0.74, status: "elevated" },
+  { terminal: "Satellite Gates", utilization: 0.41, status: "available" }
+] as const;
 
 interface AirportDetailProps {
   airport: string;
 }
 
 const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
+  const t = useTranslation();
   const [hourly, setHourly] = useState<HourlyStat[]>([]);
   const [timeline, setTimeline] = useState<TimeseriesPoint[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,16 +36,16 @@ const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
       })
       .catch((err) => {
         if (!mounted) return;
-        setError(err.message ?? "Failed to load airport details.");
+        setError(err.message ?? t.common.errorDetail);
       })
       .finally(() => mounted && setLoading(false));
     return () => {
       mounted = false;
     };
-  }, [airport]);
+  }, [airport, t.common.errorDetail]);
 
   if (loading) {
-    return <Loader label="Loading airport detail..." />;
+    return <Loader label={t.common.loadingDetail} />;
   }
 
   if (error) {
@@ -52,7 +54,7 @@ const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-      <PageLayout title={`${airport} Gate Snapshot`}>
+      <PageLayout title={`${airport} · ${t.detail.gateTitle}`} description={t.detail.gateDesc}>
         <div
           style={{
             display: "grid",
@@ -72,7 +74,9 @@ const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
               }}
             >
               <strong>{gate.terminal}</strong>
-              <p style={{ margin: "0.3rem 0", color: "#6c757d", fontSize: "0.85rem" }}>{gate.status}</p>
+              <p style={{ margin: "0.3rem 0", color: "#6c757d", fontSize: "0.85rem" }}>
+                {t.detail.gateStatus[gate.status]}
+              </p>
               <div
                 style={{
                   height: "8px",
@@ -89,21 +93,26 @@ const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
                   }}
                 />
               </div>
-              <small style={{ color: "#868e96" }}>{(gate.utilization * 100).toFixed(0)}% utilization</small>
+              <small style={{ color: "#868e96" }}>
+                {t.detail.utilizationLabel.replace("{value}", (gate.utilization * 100).toFixed(0))}
+              </small>
             </div>
           ))}
         </div>
       </PageLayout>
 
-      <PageLayout title={`Hourly Breakdown (${airport})`} description="Delay rate, flights, congestion ratio">
+      <PageLayout
+        title={`${airport} · ${t.detail.hourlyTitle}`}
+        description={t.detail.hourlyDesc}
+      >
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
             <thead>
               <tr style={{ background: "#f8f9fa" }}>
-                <th>Hour</th>
-                <th>Delay Rate</th>
-                <th>Congestion</th>
-                <th>Flights</th>
+                <th>{t.detail.table.hour}</th>
+                <th>{t.detail.table.delayRate}</th>
+                <th>{t.detail.table.congestion}</th>
+                <th>{t.detail.table.flights}</th>
               </tr>
             </thead>
             <tbody>
@@ -120,14 +129,14 @@ const AirportDetail: React.FC<AirportDetailProps> = ({ airport }) => {
         </div>
       </PageLayout>
 
-      <PageLayout title="Recent Delay Timeline" description="Full timeline from the processed dataset">
+      <PageLayout title={t.detail.timelineTitle} description={t.detail.timelineDesc}>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
             <thead>
               <tr style={{ background: "#f8f9fa" }}>
-                <th>Date</th>
-                <th>Delay Rate</th>
-                <th>Flights</th>
+                <th>{t.detail.table.date}</th>
+                <th>{t.detail.table.delayRate}</th>
+                <th>{t.detail.table.flights}</th>
               </tr>
             </thead>
             <tbody>

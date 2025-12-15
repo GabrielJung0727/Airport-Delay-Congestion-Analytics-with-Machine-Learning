@@ -9,19 +9,19 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ title, value, subtitle }) => (
   <div
     style={{
-      padding: "1rem",
-      borderRadius: "12px",
-      border: "1px solid #e3e3e3",
-      backgroundColor: "#fff",
+      padding: "1.2rem",
+      borderRadius: "18px",
+      background: "linear-gradient(135deg, rgba(79,70,229,0.95), rgba(16,185,129,0.85))",
+      color: "#fff",
       display: "flex",
       flexDirection: "column",
       gap: "0.4rem",
-      boxShadow: "0 2px 4px rgba(0,0,0,0.04)"
+      boxShadow: "0 15px 45px rgba(15,23,42,0.3)"
     }}
   >
-    <span style={{ fontSize: "0.85rem", color: "#666" }}>{title}</span>
-    <strong style={{ fontSize: "1.4rem" }}>{value}</strong>
-    {subtitle && <span style={{ fontSize: "0.8rem", color: "#999" }}>{subtitle}</span>}
+    <span style={{ fontSize: "0.85rem", opacity: 0.8 }}>{title}</span>
+    <strong style={{ fontSize: "1.6rem" }}>{value}</strong>
+    {subtitle && <span style={{ fontSize: "0.8rem", opacity: 0.75 }}>{subtitle}</span>}
   </div>
 );
 

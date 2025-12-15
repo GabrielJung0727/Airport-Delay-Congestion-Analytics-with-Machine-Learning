@@ -7,6 +7,7 @@ import { PredictResponse } from "../types/predict";
 import ProbabilityGauge from "../components/ProbabilityGauge";
 import { fetchTimeseriesStats } from "../api/stats";
 import { TimeseriesPoint } from "../types/stats";
+import { useTranslation } from "../i18n";
 
 interface PredictionLabProps {
   airport: string;
@@ -20,6 +21,7 @@ const defaultForm = {
 };
 
 const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
+  const t = useTranslation();
   const [form, setForm] = useState(defaultForm);
   const [result, setResult] = useState<PredictResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,12 +46,12 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
       })
       .catch((err) => {
         if (!mounted) return;
-        setCalendarError(err.message ?? "Calendar unavailable");
+        setCalendarError(err.message ?? t.predictionCalendar.noData);
       });
     return () => {
       mounted = false;
     };
-  }, [airport]);
+  }, [airport, t.predictionCalendar.noData]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -171,17 +173,14 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
         ...(selectedResult ? { [selectedDate]: selectedResult.delay_probability } : {})
       }));
     } catch (err: any) {
-      setError(err.message ?? "Prediction failed");
+      setError(err.message ?? t.common.predictionFailed);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <PageLayout
-      title="Prediction Lab"
-      description="Pick a day from the calendar, tweak parameters, and get ML-backed delay probability"
-    >
+    <PageLayout title={t.prediction.title} description={t.prediction.description}>
       <div
         style={{
           display: "flex",
@@ -207,14 +206,14 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
               padding: "1rem",
               borderRadius: "12px",
               border: "1px solid #e9ecef"
-          }}
-        >
-          <div style={{ gridColumn: "1 / -1", fontWeight: 600, color: "#2c3e50" }}>
-            Target Date: {selectedDate}
-          </div>
-          {["hour", "weekday", "month", "congestion_ratio"].map((field) => (
-            <label key={field} style={{ fontSize: "0.85rem", color: "#555" }}>
-                {field.replace("_", " ")}
+            }}
+          >
+            <div style={{ gridColumn: "1 / -1", fontWeight: 600, color: "#2c3e50" }}>
+              {t.prediction.targetLabel}: {selectedDate}
+            </div>
+            {["hour", "weekday", "month", "congestion_ratio"].map((field) => (
+              <label key={field} style={{ fontSize: "0.85rem", color: "#555" }}>
+                {t.prediction.fields[field as keyof typeof form]}
                 <input
                   type="number"
                   name={field}
@@ -234,8 +233,7 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
               </label>
             ))}
             <div style={{ gridColumn: "1 / -1", fontSize: "0.8rem", color: "#6c757d" }}>
-              <strong>Tips:</strong> hour=local time, weekday=ISO (0=Mon), month=1-12. Congestion 1.0 equals historical
-              average.
+              {t.prediction.tips}
             </div>
             <div style={{ gridColumn: "1 / -1", display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
               <button
@@ -249,7 +247,7 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                   cursor: "pointer"
                 }}
               >
-                Run Prediction
+                {t.prediction.runButton}
               </button>
               <button
                 type="button"
@@ -263,7 +261,7 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                   cursor: "pointer"
                 }}
               >
-                Reset
+                {t.prediction.resetButton}
               </button>
             </div>
           </form>
@@ -310,7 +308,7 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                   marginLeft: "0.5rem"
                 }}
               >
-                Today
+                {t.prediction.calendarToday}
               </button>
             </div>
             {calendarError && <ErrorState message={calendarError} />}
@@ -326,7 +324,7 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                     marginBottom: "0.5rem"
                   }}
                 >
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                  {t.predictionCalendar.weekdays.map((day) => (
                     <div key={day}>{day}</div>
                   ))}
                 </div>
@@ -402,12 +400,18 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                           </small>
                           {passengerEstimate && (
                             <small style={{ color: "#868e96" }}>
-                              Pax {passengerEstimate.toLocaleString()}
+                              {t.predictionCalendar.paxLabel.replace(
+                                "{count}",
+                                passengerEstimate.toLocaleString()
+                              )}
                             </small>
                           )}
                           {predictedPassengerDelay !== null && (
                             <small style={{ color: level ? "#868e96" : "#4c6ef5", fontWeight: 600 }}>
-                              Pred Delay {predictedPassengerDelay.toLocaleString()}
+                              {t.predictionCalendar.predictedPassengerLabel.replace(
+                                "{count}",
+                                predictedPassengerDelay.toLocaleString()
+                              )}
                             </small>
                           )}
                         </button>
@@ -418,13 +422,13 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
               </>
             )}
             <small style={{ color: "#868e96", display: "block", marginTop: "0.6rem" }}>
-              Click any day to auto-fill weekday/month. Colors indicate recent delay intensity.
+              {t.prediction.calendarHint}
             </small>
           </div>
         </div>
 
         <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
-          {loading && <Loader label="Predicting..." />}
+          {loading && <Loader label={t.prediction.loaderLabel} />}
           {error && <ErrorState message={error} />}
           {!loading && !error && result && (
             <>
@@ -439,11 +443,10 @@ const PredictionLab: React.FC<PredictionLabProps> = ({ airport }) => {
                 }}
               >
                 <strong style={{ fontSize: "1.2rem" }}>
-                  {result.predicted_label === 1 ? "Likely Delay" : "On-Time Window"}
+                  {result.predicted_label === 1 ? t.prediction.resultLikelyDelay : t.prediction.resultOnTime}
                 </strong>
                 <p style={{ margin: "0.5rem 0", color: "#495057" }}>
-                  Threshold {result.threshold.toFixed(2)} · adjust staffing & gate sequencing when probability &gt;
-                  threshold.
+                  {t.prediction.resultNote.replace("{threshold}", result.threshold.toFixed(2))}
                 </p>
               </div>
             </>

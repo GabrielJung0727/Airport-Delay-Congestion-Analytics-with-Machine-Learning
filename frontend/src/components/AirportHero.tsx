@@ -1,10 +1,14 @@
 import React from "react";
+import { useTranslation } from "../i18n";
 
 interface AirportHeroProps {
   airport: string;
 }
 
 const AirportHero: React.FC<AirportHeroProps> = ({ airport }) => {
+  const t = useTranslation();
+  const heroText = t.hero;
+  const title = heroText.title.replace("{airport}", airport);
   return (
     <div
       style={{
@@ -19,13 +23,13 @@ const AirportHero: React.FC<AirportHeroProps> = ({ airport }) => {
     >
       <div style={{ maxWidth: "480px" }}>
         <p style={{ letterSpacing: "0.2em", fontSize: "0.8rem", marginBottom: "0.5rem", textTransform: "uppercase" }}>
-          Airport Ops Command
+          {heroText.tagline}
         </p>
         <h1 style={{ margin: 0, fontSize: "2.6rem", lineHeight: 1.2 }}>
-          {airport} Delay Intelligence
+          {title}
         </h1>
         <p style={{ marginTop: "0.8rem", color: "rgba(255,255,255,0.78)" }}>
-          Live congestion telemetry + ML-based delay probability. Designed for the airport situation room.
+          {heroText.description}
         </p>
       </div>
       <span

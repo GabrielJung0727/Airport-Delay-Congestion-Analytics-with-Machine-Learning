@@ -15,12 +15,14 @@ import StatCard from "../components/StatCard";
 import PageLayout from "../components/PageLayout";
 import { fetchAirportStats, fetchHourlyStats, fetchTimeseriesStats } from "../api/stats";
 import { AirportStats, HourlyStat, TimeseriesPoint } from "../types/stats";
+import { useTranslation } from "../i18n";
 
 interface DashboardProps {
   airport: string;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ airport }) => {
+  const t = useTranslation();
   const [airportStats, setAirportStats] = useState<AirportStats | null>(null);
   const [hourly, setHourly] = useState<HourlyStat[]>([]);
   const [timeline, setTimeline] = useState<TimeseriesPoint[]>([]);
@@ -44,37 +46,41 @@ const Dashboard: React.FC<DashboardProps> = ({ airport }) => {
       })
       .catch((err) => {
         if (!mounted) return;
-        setError(err.message ?? "Failed to load dashboard");
+        setError(err.message ?? t.common.errorDashboard);
       })
       .finally(() => mounted && setLoading(false));
     return () => {
       mounted = false;
     };
-  }, [airport]);
+  }, [airport, t.common.errorDashboard]);
 
   const statCards = useMemo(() => {
     if (!airportStats) return [];
+    const statText = t.dashboard.statCards;
     return [
       {
-        title: "Avg Delay Rate",
+        title: statText.avgDelayRate,
         value: `${(airportStats.avg_delay_rate * 100).toFixed(1)}%`,
-        subtitle: `${airportStats.total_flights.toLocaleString()} flights`
+        subtitle: statText.avgFlightsSubtitle.replace(
+          "{count}",
+          airportStats.total_flights.toLocaleString()
+        )
       },
       {
-        title: "Peak Delay Hour",
+        title: statText.peakDelayHour,
         value: airportStats.peak_hour !== null ? `${airportStats.peak_hour}:00` : "-",
         subtitle: `${airportStats.from_date} → ${airportStats.to_date}`
       },
       {
-        title: "Runway Throughput",
-        value: "74 ops/hr",
-        subtitle: "Derived from historical operations"
+        title: statText.throughput,
+        value: statText.throughputValue,
+        subtitle: statText.throughputSubtitle
       }
     ];
-  }, [airportStats]);
+  }, [airportStats, t.dashboard.statCards]);
 
   if (loading) {
-    return <Loader label="Loading dashboard..." />;
+    return <Loader label={t.common.loadingDashboard} />;
   }
 
   if (error) {
@@ -82,12 +88,15 @@ const Dashboard: React.FC<DashboardProps> = ({ airport }) => {
   }
 
   if (!airportStats) {
-    return <ErrorState message="Dashboard data unavailable." />;
+    return <ErrorState message={t.common.errorDashboard} />;
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-      <PageLayout title="Apron Overview" description={`Flight telemetry for ${airport}`}>
+      <PageLayout
+        title={t.dashboard.overviewTitle}
+        description={t.dashboard.overviewDesc.replace("{airport}", airport)}
+      >
         <div
           style={{
             display: "grid",
@@ -101,7 +110,7 @@ const Dashboard: React.FC<DashboardProps> = ({ airport }) => {
         </div>
       </PageLayout>
 
-      <PageLayout title="Delay Trend (Last 14 days)" description="ML baseline vs actual rates">
+      <PageLayout title={t.dashboard.trendTitle} description={t.dashboard.trendDesc}>
         <div style={{ width: "100%", height: 260 }}>
           <ResponsiveContainer>
             <AreaChart data={timeline}>
@@ -126,7 +135,7 @@ const Dashboard: React.FC<DashboardProps> = ({ airport }) => {
         </div>
       </PageLayout>
 
-      <PageLayout title="Hourly Hotspots" description="Identify crew/bay pressure slots">
+      <PageLayout title={t.dashboard.hourlyTitle} description={t.dashboard.hourlyDesc}>
         <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>
             <BarChart data={hourly}>

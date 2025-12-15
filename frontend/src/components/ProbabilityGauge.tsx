@@ -1,11 +1,13 @@
 import React from "react";
 import { RadialBarChart, RadialBar, PolarAngleAxis, ResponsiveContainer } from "recharts";
+import { useTranslation } from "../i18n";
 
 interface ProbabilityGaugeProps {
   probability: number;
 }
 
 const ProbabilityGauge: React.FC<ProbabilityGaugeProps> = ({ probability }) => {
+  const t = useTranslation();
   const value = Math.min(Math.max(probability * 100, 0), 100);
   const data = [{ name: "Delay", value }];
 
@@ -36,7 +38,7 @@ const ProbabilityGauge: React.FC<ProbabilityGaugeProps> = ({ probability }) => {
       </ResponsiveContainer>
       <div style={{ textAlign: "center", marginTop: "-40px" }}>
         <strong style={{ fontSize: "1.4rem" }}>{value.toFixed(1)}%</strong>
-        <div style={{ color: "#6c757d", fontSize: "0.9rem" }}>Delay probability</div>
+        <div style={{ color: "#6c757d", fontSize: "0.9rem" }}>{t.components.gaugeLabel}</div>
       </div>
     </div>
   );

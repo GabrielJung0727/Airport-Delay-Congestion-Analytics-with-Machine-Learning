@@ -11,24 +11,33 @@ const PageLayout: React.FC<PageLayoutProps> = ({ title, description, actions, ch
   return (
     <section style={{ marginBottom: "2rem" }}>
       <div
+        className="glass-panel"
         style={{
+          padding: "1.5rem",
           display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "1rem",
-          marginBottom: "1rem"
+          flexDirection: "column",
+          gap: "1rem"
         }}
       >
-        <div>
-          <h2 style={{ margin: 0 }}>{title}</h2>
-          {description && (
-            <p style={{ margin: "0.25rem 0", color: "#666", fontSize: "0.9rem" }}>{description}</p>
-          )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem"
+          }}
+        >
+          <div>
+            <h2 style={{ margin: 0 }}>{title}</h2>
+            {description && (
+              <p style={{ margin: "0.25rem 0", color: "#666", fontSize: "0.9rem" }}>{description}</p>
+            )}
+          </div>
+          {actions}
         </div>
-        {actions}
+        <div>{children}</div>
       </div>
-      {children}
     </section>
   );
 };
