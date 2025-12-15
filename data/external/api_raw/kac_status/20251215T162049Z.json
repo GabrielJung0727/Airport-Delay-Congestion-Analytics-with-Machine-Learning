@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "dry_run": true
+  },
+  "items": [
+    {
+      "message": "kac_status-sample",
+      "ts": "20251215T162049Z"
+    }
+  ]
+}

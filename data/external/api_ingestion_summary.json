@@ -1,0 +1,22 @@
+[
+  {
+    "source": "kac_status",
+    "status": "dry-run",
+    "records": 1
+  },
+  {
+    "source": "molit_domestic",
+    "status": "dry-run",
+    "records": 1
+  },
+  {
+    "source": "icn_passenger",
+    "status": "dry-run",
+    "records": 1
+  },
+  {
+    "source": "icn_arrivals",
+    "status": "dry-run",
+    "records": 1
+  }
+]

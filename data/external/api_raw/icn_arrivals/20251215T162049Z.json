@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "dry_run": true
+  },
+  "items": [
+    {
+      "message": "icn_arrivals-sample",
+      "ts": "20251215T162049Z"
+    }
+  ]
+}

@@ -521,6 +521,8 @@ python -m ml.train \
 45. “실시간 확장 가능” 근거 확보  
 ✅ API = 학습 보조 + 데모용
 
+완료
+
 ### 🟪 PHASE 8 — 모델 학습 (70% → 85%)
 
 46. Baseline: Logistic/RF
