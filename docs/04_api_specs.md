@@ -535,6 +535,8 @@ python -m ml.train \
 53. Feature Importance 추출  
 ✅ “왜 이 모델이 낫다” 설명 가능
 
+완료
+
 ### 🟪 PHASE 9 — Backend API (85% → 92%)
 
 54. 통계 조회 API

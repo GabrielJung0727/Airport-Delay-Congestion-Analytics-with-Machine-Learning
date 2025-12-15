@@ -1,22 +1,22 @@
 [
   {
     "source": "kac_status",
-    "status": "dry-run",
-    "records": 1
+    "status": "failed",
+    "error": "404 Client Error: Not Found for url: https://openapi.airport.co.kr/service/rest/StatusOfFlights?serviceKey=Kgn3NZtSyDOE51%252FjW0cW8kkX7Yxvga%252FZ%252FdrpGvn%252B0m5IBqRV9UCKO%252BXRxFXWwKNHPsRUqzPFW6CdTSHbYln2Kw%253D%253D&schDate=20251215&pageNo=1&numOfRows=100&schLineType=D&_type=json"
   },
   {
     "source": "molit_domestic",
-    "status": "dry-run",
-    "records": 1
+    "status": "failed",
+    "error": "500 Server Error: Internal Server Error for url: https://apis.data.go.kr/1613000/DmstcFlightNvgInfoService?serviceKey=Kgn3NZtSyDOE51%252FjW0cW8kkX7Yxvga%252FZ%252FdrpGvn%252B0m5IBqRV9UCKO%252BXRxFXWwKNHPsRUqzPFW6CdTSHbYln2Kw%253D%253D&depAirportId=NAARKSS&arrAirportId=NAARKPC&depPlandTime=20251215&pageNo=1&numOfRows=100&_type=json"
   },
   {
     "source": "icn_passenger",
-    "status": "dry-run",
-    "records": 1
+    "status": "failed",
+    "error": "500 Server Error: Internal Server Error for url: https://apis.data.go.kr/B551177/passgrAnncmt?serviceKey=Kgn3NZtSyDOE51%252FjW0cW8kkX7Yxvga%252FZ%252FdrpGvn%252B0m5IBqRV9UCKO%252BXRxFXWwKNHPsRUqzPFW6CdTSHbYln2Kw%253D%253D&from_time=0000&to_time=2400&airport=T1&_type=json"
   },
   {
     "source": "icn_arrivals",
-    "status": "dry-run",
-    "records": 1
+    "status": "failed",
+    "error": "500 Server Error: Internal Server Error for url: https://apis.data.go.kr/B551177/StatusOfArrivals?serviceKey=Kgn3NZtSyDOE51%252FjW0cW8kkX7Yxvga%252FZ%252FdrpGvn%252B0m5IBqRV9UCKO%252BXRxFXWwKNHPsRUqzPFW6CdTSHbYln2Kw%253D%253D&airport_code=P01&from_time=0000&to_time=2400&_type=json"
   }
 ]
