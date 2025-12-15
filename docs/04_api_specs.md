@@ -449,6 +449,8 @@ python -m ml.train \
 9. “raw 수정 금지” 규칙 명시  
 ✅ raw 폴더 봉인, 구조 설명 가능
 
+완료
+
 ### 🟨 PHASE 2 — 항공편 Master Table (15% → 25%)
 
 10. `ml/pipelines/00_merge_raw.py`
