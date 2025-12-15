@@ -1,0 +1,22 @@
+{
+  "rows": 36674,
+  "airports": 1,
+  "delay_rate": 0.7764628892403338,
+  "date_start": "2025-10-14 00:00:00",
+  "date_end": "2025-12-15 00:00:00",
+  "missing_after_impute": {
+    "airport_hour_flights": 0,
+    "daily_flights": 0,
+    "airport_daily_avg_flights": 0,
+    "hourly_congestion_ratio": 0,
+    "previous_hour_delay_rate": 0,
+    "prev_day_delay_rate": 0,
+    "delay_rate": 0,
+    "airport_flight_share": 0,
+    "passengers_total": 0,
+    "cargo_total": 0,
+    "national_hour_ratio": 0,
+    "national_weekday_ratio": 0,
+    "national_monthly_ratio": 0
+  }
+}

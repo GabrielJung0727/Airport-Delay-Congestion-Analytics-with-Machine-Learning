@@ -498,6 +498,8 @@ python -m ml.train \
 34. `data/processed/train_table.parquet`  
 ✅ 단일 테이블로 학습 가능
 
+완료
+
 ### 🟦 PHASE 6 — EDA & 인사이트 (55% → 65%)
 
 35. 전체 지연률

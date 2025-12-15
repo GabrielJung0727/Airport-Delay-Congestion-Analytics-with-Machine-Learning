@@ -287,13 +287,13 @@ def run_pipeline(args: argparse.Namespace) -> dict[str, float]:
         on="airport_code",
         how="left",
     )
-    features = features.merge(kac_hourly, on="hour", how="left")
-    features = features.merge(kac_weekday, on="weekday", how="left")
+    features = features.merge(kac_hourly.rename(columns={"hour_ratio": "national_hour_ratio"}), on="hour", how="left")
+    features = features.merge(kac_weekday.rename(columns={"weekday_ratio": "national_weekday_ratio"}), on="weekday", how="left")
 
     monthly_ratio = (
         kac_timeseries.groupby("month")["monthly_ratio"].mean().reset_index(name="monthly_ratio")
     )
-    features = features.merge(monthly_ratio, on="month", how="left", suffixes=("", "_national"))
+    features = features.merge(monthly_ratio.rename(columns={"monthly_ratio": "national_monthly_ratio"}), on="month", how="left")
 
     output_cols = [
         "airport_code",
@@ -312,9 +312,9 @@ def run_pipeline(args: argparse.Namespace) -> dict[str, float]:
         "airport_flight_share",
         "passengers_total",
         "cargo_total",
-        "hour_ratio",
-        "weekday_ratio",
-        "monthly_ratio",
+        "national_hour_ratio",
+        "national_weekday_ratio",
+        "national_monthly_ratio",
     ]
     features = features[output_cols]
 
