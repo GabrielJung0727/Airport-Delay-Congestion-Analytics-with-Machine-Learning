@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Dashboard from "../pages/Dashboard";
 import AirportDetail from "../pages/AirportDetail";
 import PredictionLab from "../pages/PredictionLab";
+import RouteAdvisor from "../pages/RouteAdvisor";
+import AirportHero from "../components/AirportHero";
 
 const tabs = [
-  { id: "dashboard", label: "Dashboard" },
-  { id: "detail", label: "Airport Detail" },
-  { id: "lab", label: "Prediction Lab" }
+  { id: "dashboard", label: "Control Tower" },
+  { id: "detail", label: "Gate Situation" },
+  { id: "lab", label: "Prediction Lab" },
+  { id: "route", label: "Route Advisor" }
 ];
 
 const AVAILABLE_AIRPORTS = ["ICN"];
@@ -19,81 +22,77 @@ const App: React.FC = () => {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: "#f5f6fa",
+        background: "linear-gradient(180deg,#edf0ff 0%, #f7fbff 40%, #f5f5f5 100%)",
         fontFamily: "Inter, system-ui, sans-serif",
-        color: "#212529"
+        color: "#212529",
+        padding: "1.5rem"
       }}
     >
-      <header
-        style={{
-          padding: "1.5rem 2rem",
-          backgroundColor: "#fff",
-          borderBottom: "1px solid #e9ecef",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "1rem"
-        }}
-      >
-        <div>
-          <h1 style={{ margin: 0 }}>Airport Delay Lab</h1>
-          <small style={{ color: "#868e96" }}>Live stats + ML predictions</small>
-        </div>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <label style={{ fontSize: "0.9rem", color: "#555" }}>
-            Airport
+      <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <AirportHero airport={airport} />
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+            background: "#fff",
+            padding: "1rem 1.5rem",
+            borderRadius: "20px",
+            boxShadow: "0 6px 30px rgba(15,23,42,0.08)"
+          }}
+        >
+          <div>
+            <p style={{ margin: 0, fontSize: "0.9rem", color: "#6c7385" }}>Choose airport</p>
+            <h2 style={{ margin: 0 }}>OPS Dashboard</h2>
+          </div>
+          <div style={{ display: "flex", gap: "0.7rem" }}>
             <select
               value={airport}
               onChange={(event) => setAirport(event.target.value)}
               style={{
-                marginLeft: "0.5rem",
-                padding: "0.4rem 0.6rem",
-                borderRadius: "8px",
-                border: "1px solid #ced4da"
+                padding: "0.5rem 0.8rem",
+                borderRadius: "10px",
+                border: "1px solid #ced4da",
+                fontSize: "1rem"
               }}
             >
               {AVAILABLE_AIRPORTS.map((code) => (
                 <option key={code}>{code}</option>
               ))}
             </select>
-          </label>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderRadius: "999px",
+                    border: "none",
+                    background: activeTab === tab.id ? "#1f7aec" : "#e9ecef",
+                    color: activeTab === tab.id ? "#fff" : "#495057",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </header>
 
-      <nav
-        style={{
-          display: "flex",
-          gap: "1rem",
-          padding: "1rem 2rem",
-          borderBottom: "1px solid #e9ecef",
-          background: "#fff"
-        }}
-      >
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            style={{
-              padding: "0.4rem 0.9rem",
-              borderRadius: "20px",
-              border: "1px solid",
-              borderColor: activeTab === tab.id ? "#4c6ef5" : "#dee2e6",
-              background: activeTab === tab.id ? "#4c6ef5" : "#fff",
-              color: activeTab === tab.id ? "#fff" : "#495057",
-              cursor: "pointer"
-            }}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </nav>
-
-      <main style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-        {activeTab === "dashboard" && <Dashboard airport={airport} />}
-        {activeTab === "detail" && <AirportDetail airport={airport} />}
-        {activeTab === "lab" && <PredictionLab airport={airport} />}
-      </main>
+        <main>
+          {activeTab === "dashboard" && <Dashboard airport={airport} />}
+          {activeTab === "detail" && <AirportDetail airport={airport} />}
+          {activeTab === "lab" && <PredictionLab airport={airport} />}
+        </main>
+        {activeTab === "route" && <RouteAdvisor airport={airport} />}
+      </div>
     </div>
   );
 };
