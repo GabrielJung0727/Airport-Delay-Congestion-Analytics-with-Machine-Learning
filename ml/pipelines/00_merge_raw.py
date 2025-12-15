@@ -120,10 +120,17 @@ def normalize_time(value) -> pd.Series:
     return hour * 100 + minute
 
 
+def parse_flight_date(series: pd.Series) -> pd.Series:
+    series = series.astype(str).str.strip()
+    series = series.replace({"": pd.NA, "nan": pd.NA})
+    parsed = pd.to_datetime(series, format="%Y%m%d", errors="coerce")
+    return parsed
+
+
 def normalize_frame(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df["direction"] = normalize_direction(df["direction"])
-    df["flight_date"] = pd.to_datetime(df["flight_date"], errors="coerce").dt.date
+    df["flight_date"] = parse_flight_date(df["flight_date"])
     for col in ["flight_number", "airport_name", "destination", "airline"]:
         df[col] = (
             df[col]
