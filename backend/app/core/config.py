@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     api_icn_arrival_base_url: str = Field("https://apis.data.go.kr/B551177/StatusOfArrivals", env="API_ICN_ARRIVAL_BASE_URL")
     data_root: str = Field("data", env="DATA_ROOT")
     model_dir: str = Field("ml/artifacts/models", env="MODEL_DIR")
+    metrics_path: str = Field("ml/artifacts/reports/metrics.json", env="METRICS_PATH")
+    train_table_path: str = Field("data/processed/train_table.parquet", env="TRAIN_TABLE_PATH")
+    default_model_name: str = Field("lightgbm", env="MODEL_NAME")
     log_level: str = Field("INFO", env="LOG_LEVEL")
 
     class Config:

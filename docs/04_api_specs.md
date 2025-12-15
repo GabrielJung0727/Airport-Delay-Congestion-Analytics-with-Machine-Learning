@@ -546,6 +546,8 @@ python -m ml.train \
 58. Swagger 검증  
 ✅ curl로 예측값 수신
 
+완료
+
 ### 🟦 PHASE 10 — Frontend (92% → 98%)
 
 59. Dashboard
