@@ -7,11 +7,13 @@ PHASE 11(정리 및 제출)을 한 번에 처리하기 위한 실무 체크리�
 ## 1. 서버 구동 및 기본 예측 세팅 (Step 64)
 
 1. **환경 준비**
+
    ```bash
    source .venv/bin/activate
-   uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8001
+      
    npm --prefix frontend run dev
    ```
+
    - `.env`에 `DATA_ROOT`, `MODEL_DIR`, 외부 API Key가 모두 존재해야 한다.
    - 가동 전 `python ml/pipelines/*.py`를 재실행하여 `data/processed/train_table.parquet`과 `ml/artifacts/models/xgb.pkl`을 최신 상태로 맞춘다.
 
@@ -21,12 +23,14 @@ PHASE 11(정리 및 제출)을 한 번에 처리하기 위한 실무 체크리�
    - Dashboard/Detail API는 최근 14일 데이터를 자동으로 잘라 사용하므로 추가 설정이 필요 없다. 단, 기간 메타데이터가 필요하면 `data/processed/train_table_stats.json`을 갱신한다.
 
 3. **헬스체크**
+
    ```bash
    curl http://localhost:8001/api/v1/health
    curl "http://localhost:8001/api/v1/stats/airport?airport=ICN"
    curl -X POST http://localhost:8001/api/v1/predict -H "Content-Type: application/json" \
      -d '{"airport":"ICN","hour":10,"weekday":2,"month":12,"congestion_ratio":1.1}'
    ```
+
    - 위 세 요청이 모두 200 OK로 응답하면 프론트엔드 기본 시각화도 정상 연동된 상태다.
 
 ---
